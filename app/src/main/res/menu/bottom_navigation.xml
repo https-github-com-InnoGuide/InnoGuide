@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_map"
+        android:icon="@drawable/ic_map_black_24dp"
+        android:title="Map"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/nav_events"
+        android:icon="@drawable/ic_event_black_24dp"
+        android:title="Events"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_map_black_24dp"
+        android:title="Profile"
+        android:enabled="true"/>
+</menu>

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,9 +15,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MapActivity  extends AppCompatActivity implements OnMapReadyCallback{
 
@@ -25,6 +29,30 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private Boolean mLocationPermissionGranted = false;
     private static final int L_PERMISSION_REQUEST_CODE = 1234;
+
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+        new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment selectedFrag = null;
+                // define the logic to switch between the fragments in navigation bar
+                switch (item.getItemId()){
+                    case R.id.nav_events: {
+                        Toast.makeText(getApplicationContext(), "You are going to open events fragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case R.id.nav_profile:{
+                        Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    case R.id.nav_map:{
+                        Toast.makeText(getApplicationContext(), "You are going to open the Map", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+                return true;
+            }
+    };
     private GoogleMap gMap;
 
     @Override
@@ -32,6 +60,8 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         getLocationPermission();
+        BottomNavigationView nView = findViewById(R.id.bottom_navigation);
+        nView.setOnNavigationItemSelectedListener(navListener);
     }
 
     private void initMap(){
