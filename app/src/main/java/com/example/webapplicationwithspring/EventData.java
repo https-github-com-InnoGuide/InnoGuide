@@ -2,8 +2,6 @@ package com.example.webapplicationwithspring;
 
 import android.os.AsyncTask;
 
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,8 +13,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class EventData extends AsyncTask<Void,Void,Void> {
     String data = "";
