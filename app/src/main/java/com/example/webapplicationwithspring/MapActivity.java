@@ -1,9 +1,7 @@
 package com.example.webapplicationwithspring;
 
 import android.Manifest;
-import android.app.Activity;
-import android.app.AppComponentFactory;
-import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +13,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,30 +20,35 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MapActivity  extends AppCompatActivity implements OnMapReadyCallback{
-
+// define tags and permission strings
     private static final String TAG = "MapActivity";
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
     private Boolean mLocationPermissionGranted = false;
     private static final int L_PERMISSION_REQUEST_CODE = 1234;
-
+    // this will switch between items in the navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
         new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Fragment selectedFrag = null;
+
                 // define the logic to switch between the fragments in navigation bar
                 switch (item.getItemId()){
                     case R.id.nav_events: {
+                        // when the new item was clicked we switch an activity
                         Toast.makeText(getApplicationContext(), "You are going to open events fragment", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getApplicationContext(), EventsActivity.class));
+                        overridePendingTransition(0,0);
+
                         break;
                     }
                     case R.id.nav_profile:{
+
                         Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
                         break;
                     }
                     case R.id.nav_map:{
-                        Toast.makeText(getApplicationContext(), "You are going to open the Map", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "You are already in the Map", Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
@@ -59,9 +61,12 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        // map initialization
         getLocationPermission();
+        // set the bottom navigation to current item
         BottomNavigationView nView = findViewById(R.id.bottom_navigation);
         nView.setOnNavigationItemSelectedListener(navListener);
+        nView.setSelectedItemId(R.id.nav_map);
     }
 
     private void initMap(){
@@ -69,7 +74,7 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapActivity.this);
     }
-
+    // get location permission
     private void getLocationPermission(){
         Log.d(TAG, "getLocation permission : gettionf location permissions");
         String[] permissions  = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -83,7 +88,7 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
+// check for all permissions to be granted
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         Log.d(TAG, "onRequestPermissionResult : called");
@@ -105,7 +110,7 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
             }
         }
     }
-
+// when the map is ready initialize it
     @Override
     public void onMapReady(GoogleMap googleMap) {
         Toast.makeText(this, "Map is ready", Toast.LENGTH_SHORT).show();
