@@ -1,9 +1,12 @@
 package com.example.webapplicationwithspring;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,7 +14,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -63,12 +65,9 @@ public class EventsActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        eventData =  findViewById(R.id.event_data);
         scrollView =  findViewById(R.id.scroll_view);
+        final LinearLayout linearLayout = findViewById(R.id.scroll_layout);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
-        final TextView tv = new TextView(this);
-        tv.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
-                ConstraintLayout.LayoutParams.WRAP_CONTENT));
         JsonArrayRequest objectRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 url,
@@ -78,14 +77,16 @@ public class EventsActivity extends AppCompatActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             for (int i = 0; i < response.length(); i++) {
+
+
                                 JSONObject jo = (JSONObject) response.get(i);
                                 String eventName = jo.getString("eventName");
                                 String eventDate = jo.getString("eventDate");
                                 String eventDescription = jo.getString("eventDescription");
                                 String eventPlace = jo.getString("eventPlace");
-                                eventData.append(eventName + "  at  " + eventDate + "  there will be  " + eventDescription + " in " + eventPlace);
-
-
+                                //eventData.append(eventName + "  at  " + eventDate + "  there will be  " + eventDescription + " in " + eventPlace);
+                                TextView tv = getTextView(EventsActivity.this,eventName + "  at  " + eventDate + "  there will be  " + eventDescription + " in " + eventPlace);
+                                linearLayout.addView(tv);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -95,7 +96,8 @@ public class EventsActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(EventsActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                        TextView tv = getTextView(EventsActivity.this, "Server does not response");
+                        linearLayout.addView(tv);
                         Log.d("EventSSS",error.toString());
                     }
                 }
@@ -105,5 +107,20 @@ public class EventsActivity extends AppCompatActivity {
         BottomNavigationView nView = findViewById(R.id.bottom_navigation_for_events);
         nView.setOnNavigationItemSelectedListener(navListener);
         nView.setSelectedItemId(R.id.nav_events);
+    }
+
+    public TextView getTextView(Context context,String text){
+        final TextView tv = new TextView(context);
+        tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+        tv.setTextSize(30);
+        tv.setText(text);
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(EventsActivity.this, "you have clicked on event", Toast.LENGTH_SHORT).show();
+            }
+        });
+        return tv;
+
     }
 }
