@@ -12,15 +12,14 @@
         android:id = "@+id/scroll_view"
         app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_for_events"
         app:layout_constraintTop_toTopOf="parent">
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:textSize="24sp"
             android:hint="Text will be here"
-            android:id="@+id/event_data"
-            android:visibility="gone"
+            android:id="@+id/event_data1"
+            android:visibility="visible"
             />
 
     </ScrollView>

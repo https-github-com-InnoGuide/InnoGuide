@@ -26,7 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EventsActivity extends AppCompatActivity {
-    public static TextView eventData;
+    public  TextView eventData;
     private ScrollView scrollView;
 // url for local server
     private String url = "http://192.168.0.119:8080/eventsList";
@@ -63,8 +63,8 @@ public class EventsActivity extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        eventData = (TextView) findViewById(R.id.event_data);
-        scrollView = (ScrollView) findViewById(R.id.scroll_view);
+        eventData =  findViewById(R.id.event_data);
+        scrollView =  findViewById(R.id.scroll_view);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         final TextView tv = new TextView(this);
         tv.setLayoutParams(new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT,
@@ -83,7 +83,7 @@ public class EventsActivity extends AppCompatActivity {
                                 String eventDate = jo.getString("eventDate");
                                 String eventDescription = jo.getString("eventDescription");
                                 String eventPlace = jo.getString("eventPlace");
-                                    eventData.append(eventName + "  at  " + eventDate + "  there will be  " + eventDescription + " in " + eventPlace);
+                                eventData.append(eventName + "  at  " + eventDate + "  there will be  " + eventDescription + " in " + eventPlace);
 
 
                             }
