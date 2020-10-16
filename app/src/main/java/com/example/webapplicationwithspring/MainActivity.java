@@ -24,14 +24,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonEvent = (Button) findViewById(R.id.btnEvents);
-        buttonEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, EventsActivity.class);
-                startActivity(intent);
-            }
-        });
+
+
+
         if(isServicesOK()){
             init();
         }
