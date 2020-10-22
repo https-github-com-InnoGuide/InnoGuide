@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,9 @@ import com.google.android.gms.maps.GoogleMap;
 
 public class MainActivity extends AppCompatActivity {
 
+    private EditText emailEditText = findViewById(R.id.login_Email);
+    private EditText passwordEditText = findViewById(R.id.login_Password);
+
     GoogleMap map;
     private static final String TAG = "MainActivity";
     private static final int ERROR = 9001;
@@ -23,9 +27,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
-
 
         if(isServicesOK()){
             init();
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String email = emailEditText.getText().toString();
+                String password = passwordEditText.getText().toString();
+
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
             }

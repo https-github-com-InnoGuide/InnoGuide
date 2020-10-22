@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +49,9 @@ public class EventsActivity extends AppCompatActivity {
     MyAdapter adapter;
     FragmentManager fragmentManager = getFragmentManager();
     // url for local server
-    private String url = "http://192.168.0.119:8080/eventsList";
-    // this will switch between items in the navigation bar
+    //private String url = "http://192.168.0.119:8080/eventsList";
+    private String url = "http://172.20.10.12:8080/eventsList";
+    // this will switch between items in the navigation bar;
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
                 @Override
@@ -102,8 +105,8 @@ public class EventsActivity extends AppCompatActivity {
             String[] titles = new String[EventsController.getSize()];
             String[] descriptions = new String[EventsController.getSize()];
             for (Event e : EventsController.getValue()) {
-                titles[e.getId() - 1] = e.getEventName();
-                descriptions[e.getId() - 1] = e.getEventDescription();
+                titles[e.getId()] = e.getEventName();
+                descriptions[e.getId()] = e.getEventDescription();
             }
             MyAdapter adapter = new MyAdapter(this, titles, descriptions);
             listView.setAdapter(adapter);
@@ -134,6 +137,9 @@ public class EventsActivity extends AppCompatActivity {
                                 adapter = new MyAdapter(EventsActivity.this, titles.toArray(new String[titles.size()]), descriptions.toArray(new String[descriptions.size()]));
                                 listView.setAdapter(adapter);
                             } catch (JSONException e) {
+                                //View errorView = getTextView(EventsActivity.this, "Server does not response");
+
+                                //listView.addHeaderView(errorView);
                                 e.printStackTrace();
                             }
                         }
@@ -141,9 +147,9 @@ public class EventsActivity extends AppCompatActivity {
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            //TextView tv = getTextView(EventsActivity.this, "Server does not response");
-
-                            //linearLayout.addView(tv);
+                            TextView tv = getTextView(EventsActivity.this, "Server does not response");
+                            FrameLayout frameLayout = findViewById(R.id.fragment_container);
+                            frameLayout.addView(tv);
                             Log.d("EventSSS", error.toString());
                         }
                     }
@@ -171,7 +177,7 @@ public class EventsActivity extends AppCompatActivity {
         nView.setOnNavigationItemSelectedListener(navListener);
         nView.setSelectedItemId(R.id.nav_events);
     }
-/*
+
     public TextView getTextView(Context context, String text) {
         final TextView tv = new TextView(context);
         tv.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
@@ -188,9 +194,9 @@ public class EventsActivity extends AppCompatActivity {
         return tv;
 
     }
-*/
 
-// when the idem is clicked details have to be shown
+
+    // when the idem is clicked details have to be shown
     private void showDetails(int index) {
         listView.setItemChecked(index, true);
         EventFragment eventFragment =  EventFragment.newInstance(index);
@@ -200,7 +206,7 @@ public class EventsActivity extends AppCompatActivity {
         fragmentTransaction.commit();
         listView.setVisibility(View.INVISIBLE);
     }
-// customized array adapter is needed for proper data visualization
+    // customized array adapter is needed for proper data visualization
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         String rTitle[];
