@@ -17,8 +17,8 @@ import com.google.android.gms.maps.GoogleMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private EditText emailEditText = findViewById(R.id.login_Email);
-    private EditText passwordEditText = findViewById(R.id.login_Password);
+ //   private EditText emailEditText = findViewById(R.id.login_Email);
+//    private EditText passwordEditText = findViewById(R.id.login_Password);
 
     GoogleMap map;
     private static final String TAG = "MainActivity";
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = emailEditText.getText().toString();
-                String password = passwordEditText.getText().toString();
+        //        String email = emailEditText.getText().toString();
+         //       String password = passwordEditText.getText().toString();
 
                 Intent intent = new Intent(MainActivity.this, MapActivity.class);
                 startActivity(intent);
@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(TAG,"isServiceOK: Services works ok");
             return true;
         } else if(GoogleApiAvailability.getInstance().isUserResolvableError(available)){
-            Log.d(TAG, "error occured");
+            Log.d(TAG, "error occurred");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, available, ERROR);
             dialog.show();
         } else {
