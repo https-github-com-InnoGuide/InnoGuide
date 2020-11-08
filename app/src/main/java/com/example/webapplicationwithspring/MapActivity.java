@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +25,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.example.webapplicationwithspring.directionhelpers.FetchURL;
+import com.example.webapplicationwithspring.directionhelpers.TaskLoadedCallback;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,6 +35,8 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,8 +45,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapActivity  extends AppCompatActivity implements OnMapReadyCallback{
-// define tags and permission strings
+public class MapActivity  extends AppCompatActivity implements OnMapReadyCallback, TaskLoadedCallback {
+    // define tags and permission strings
     //private static final String TAG = "MapActivity";
     //private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
     //private static final String COARSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -49,33 +54,38 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     //private static final int L_PERMISSION_REQUEST_CODE = 1234;
     // this will switch between items in the navigation bar
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
-        new BottomNavigationView.OnNavigationItemSelectedListener() {
-        @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                // define the logic to switch between the fragments in navigation bar
-                switch (item.getItemId()){
-                    case R.id.nav_events: {
-                        // when the new item was clicked we switch an activity
-                        Toast.makeText(getApplicationContext(), "You are going to open events fragment", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), EventsActivity.class));
-                        overridePendingTransition(0,0);
+                    // define the logic to switch between the fragments in navigation bar
+                    switch (item.getItemId()){
+                        case R.id.nav_events: {
+                            // when the new item was clicked we switch an activity
+                            Toast.makeText(getApplicationContext(), "You are going to open events fragment", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(getApplicationContext(), EventsActivity.class));
+                            overridePendingTransition(0,0);
 
-                        break;
-                    }
-                    case R.id.nav_profile:{
+                            break;
+                        }
+                        case R.id.nav_profile:{
 
-                        Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
-                        break;
+                            Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        case R.id.nav_suggestions:{
+                            startActivity(new Intent(getApplicationContext(), PlacesActivity.class));
+                            overridePendingTransition(0,0);
+                            break;
+                        }
+                        case R.id.nav_map:{
+                            Toast.makeText(getApplicationContext(), "You are already in the Map", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     }
-                    case R.id.nav_map:{
-                        Toast.makeText(getApplicationContext(), "You are already in the Map", Toast.LENGTH_SHORT).show();
-                        break;
-                    }
+                    return true;
                 }
-                return true;
-            }
-    };
+            };
     private GoogleMap gMap;
 
     @Override
@@ -97,6 +107,25 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
 
             init();
         }
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                //Creating Marker
+
+                //Set Marker position
+                marker.position(latLng);
+                //Set Latitude and longitude on Marker
+                marker.title(latLng.latitude+" : "+latLng.longitude);
+                //Clear the previously click position
+                mMap.clear();
+                //Zoom the marker
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+                //Add marker on Map
+                mMap.addMarker(marker);
+            }
+        });
+
     }
 
     private static final String TAG = "MapActivity";
@@ -113,6 +142,11 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
+    private Button btnGetDirection;
+    Location currentLocation;
+    MarkerOptions marker = new MarkerOptions();
+    MarkerOptions current = new MarkerOptions();
+    Polyline currentPolyline;
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private LatLng curLoc;
     @Override
@@ -121,6 +155,15 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_map);
         mSearchText = (EditText) findViewById(R.id.input_search);
         mGps = (ImageView) findViewById(R.id.ic_gps);
+        btnGetDirection = findViewById(R.id.btnGetDirection);
+        btnGetDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = getUrl(marker.getPosition(),current.getPosition(),"driving");
+                new FetchURL(MapActivity.this).execute(url,"driving");
+            }
+        });
+
 
         getLocationPermission();
 // set the bottom navigation bar to switch between activities
@@ -131,7 +174,7 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
         //MarkerOptions destination = new MarkerOptions().position(new LatLng(38.567019, -121.508839)).title("destination");
         //MarkerOptions myLocation = new MarkerOptions().position(curLoc).title("current cocation");
 
-       // String url = getUrl()
+        // String url = getUrl()
     }
 
     private void init(){
@@ -203,12 +246,13 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
                     public void onComplete(@NonNull Task task) {
                         if(task.isSuccessful()){
                             Log.d(TAG, "onComplete: found location!");
-                            Location currentLocation = (Location) task.getResult();
+                            currentLocation = (Location) task.getResult();
                             curLoc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                             moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
                                     DEFAULT_ZOOM,
                                     "My Location");
-                            Toast.makeText(MapActivity.this, "your cocation is " + currentLocation.getLatitude() + " " +
+                            current.position(curLoc);
+                            Toast.makeText(MapActivity.this, "your location is " + currentLocation.getLatitude() + " " +
                                     currentLocation.getLongitude() + " ", Toast.LENGTH_SHORT).show();
 
                         }else{
@@ -294,5 +338,26 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     private void hideSoftKeyboard(){
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
+    private String getUrl(LatLng origin, LatLng dest, String directionMode) {
+        // Origin of route
+        String str_origin = "origin=" + origin.latitude + "," + origin.longitude;
+        // Destination of route
+        String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
+        // Mode
+        String mode = "mode=" + directionMode;
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + mode;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" +"AIzaSyD4SHywIY-5Z4t_zs1O89Iy9eyvNt2QfdY";
+        return url;
+    }
 
+    @Override
+    public void onTaskDone(Object... values) {
+        if (currentPolyline!=null)
+            currentPolyline.remove();
+        currentPolyline=mMap.addPolyline((PolylineOptions)values[0]);
+    }
 }

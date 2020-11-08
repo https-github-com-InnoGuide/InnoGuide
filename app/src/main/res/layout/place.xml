@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+
+    android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardCornerRadius="20dp"
+        android:layout_margin="8dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/Card_image"
+                android:scaleType="centerCrop"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_title"
+                android:text="Place title"
+                android:textSize="24sp"
+                android:textColor="#262626"
+                android:layout_below="@id/Card_image"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_address"
+                android:text="place address"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:layout_below="@id/card_title"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_workHours"
+                android:text="place work Hours"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:layout_below="@id/card_address"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_phoneNumber"
+                android:text="place phone number"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:layout_below="@id/card_workHours"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_telegram"
+                android:text="place telegram"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:layout_below="@id/card_phoneNumber"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="see on map"
+                android:id="@+id/card_clickText"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_below="@id/card_telegram"/>
+
+/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/card_description"
+                android:text="place description"
+                android:textSize="18sp"
+                android:textColor="#262626"
+                android:layout_below="@id/card_clickText"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="16dp"
+                />
+            <!--android:src="@drawable/place_images"         -->
+
+
+
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+</LinearLayout>

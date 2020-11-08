@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".PlacesActivity"></activity>
+        <activity android:name=".SignInActivity"></activity>
+        <activity android:name=".PlacesActivity" />
 
         <uses-library
             android:name="org.apache.http.legacy"
@@ -24,7 +25,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyB6pGRqJd5r608l3gou4OIKExdWcBFtPKU" />
+            android:value="AIzaSyD4SHywIY-5Z4t_zs1O89Iy9eyvNt2QfdY" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -38,7 +39,6 @@
         </activity>
         <activity android:name=".MapActivity" />
         <activity android:name=".EventsActivity" />
-        <activity android:name=".PlacesActivity" />
     </application>
 
 </manifest>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,24 +7,34 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".PlacesActivity">
-
+<!--
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:cardCornerRadius="20dp"
         android:layout_margin="8dp"
+        android:layout_weight="1"
         >
-
-
     </androidx.cardview.widget.CardView>
+    -->
+
+    <androidx.viewpager.widget.ViewPager
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/view_pager"
+        android:layout_above="@id/places_bottom_navigation"
+        android:layout_centerInParent="true"
+        android:overScrollMode="never"
+        android:clipToPadding="false"
+        >
+    </androidx.viewpager.widget.ViewPager>
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/places_bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
         android:background="#00FFFFFF"
-        app:layout_constraintVertical_bias="1.0"
+        android:layout_alignParentBottom="true"
         app:menu="@menu/bottom_navigation" />
-</LinearLayout>
+</RelativeLayout>

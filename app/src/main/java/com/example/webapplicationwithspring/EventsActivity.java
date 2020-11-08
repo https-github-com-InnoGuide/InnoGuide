@@ -49,8 +49,8 @@ public class EventsActivity extends AppCompatActivity {
     MyAdapter adapter;
     FragmentManager fragmentManager = getFragmentManager();
     // url for local server
-    //private String url = "http://192.168.0.119:8080/eventsList";
-    private String url = "http://172.20.10.12:8080/eventsList";
+    private String url = "http://192.168.0.119:8080/eventsList";
+    //private String url = "http://172.20.10.12:8080/eventsList";
     // this will switch between items in the navigation bar;
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
             new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -66,6 +66,11 @@ public class EventsActivity extends AppCompatActivity {
                         case R.id.nav_profile: {
 
                             Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
+                        case R.id.nav_suggestions:{
+                            startActivity(new Intent(getApplicationContext(), PlacesActivity.class));
+                            overridePendingTransition(0,0);
                             break;
                         }
                         case R.id.nav_map: {

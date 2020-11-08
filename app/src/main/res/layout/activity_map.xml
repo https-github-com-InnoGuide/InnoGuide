@@ -89,8 +89,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map"
+        android:layout_above="@id/bottom_navigation"
         tools:context=".MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        android:name="com.google.android.gms.maps.SupportMapFragment">
+
+
+    </fragment>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -137,12 +141,20 @@
         android:id="@+id/ic_gps"
         android:src="@drawable/ic_gps_fixed_black_24dp"/>
 
+    <Button
+        android:id="@+id/btnGetDirection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/bottom_navigation"
+        android:text="Get direction">
+    </Button>
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#00949090"
+        android:background="#00FFFFFF"
         app:menu="@menu/bottom_navigation" />
 
 
