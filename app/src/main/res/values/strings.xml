@@ -10,4 +10,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="get_direction">Get Direction</string>
+    <string name="get_direction_driving" />
+    <string name="driving">Driving</string>
+    <string name="walking">Walking</string>
+    <string name="bicycling">Bicycling</string>
 </resources>

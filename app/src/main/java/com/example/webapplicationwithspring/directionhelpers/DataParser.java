@@ -1,6 +1,9 @@
 package com.example.webapplicationwithspring.directionhelpers;
 
 
+import android.nfc.Tag;
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONArray;
@@ -42,6 +45,7 @@ public class DataParser {
                             hm.put("lat", Double.toString((list.get(l)).latitude));
                             hm.put("lng", Double.toString((list.get(l)).longitude));
                             path.add(hm);
+
                         }
                     }
                     routes.add(path);
