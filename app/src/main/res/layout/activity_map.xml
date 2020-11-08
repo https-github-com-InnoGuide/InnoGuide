@@ -9,7 +9,6 @@
     android:layout_height="match_parent"
     android:layout_above="@id/bottom_navigation"
     android:id="@+id/relativeLayout">
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -19,7 +18,6 @@
         android:elevation="10dp"
         android:background="@drawable/white_border"
         android:id="@+id/relLayout1">
-
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"
@@ -28,7 +26,6 @@
             android:layout_marginLeft="10dp"
             android:src="@drawable/ic_search_black_24dp"
             />
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -40,10 +37,7 @@
             android:background="@null"
             android:hint="Enter Address, City or Zip Code"
             android:imeOptions="actionSearch"/>
-
-
     </RelativeLayout>
-
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -51,8 +45,6 @@
         android:layout_height="0dp"
         android:layout_weight="2"
         tools:context=".MapActivity" />
-
-
     <ImageView
         android:id="@+id/ic_gps"
         android:layout_width="40dp"
@@ -61,22 +53,14 @@
         android:layout_weight="0"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_gps_fixed_black_24dp" />
-
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-
         android:background="#00FFFFFF"
         app:layout_constraintVertical_bias="1.0"
         app:menu="@menu/bottom_navigation" />
-
-
-
-
-
-
 </LinearLayout>
     -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -89,12 +73,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/map"
-        android:layout_above="@id/bottom_navigation"
         tools:context=".MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment">
-
-
-    </fragment>
+        android:name="com.google.android.gms.maps.SupportMapFragment" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -134,28 +114,52 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_below="@id/relLayout1"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="10dp"
         android:scaleType="centerCrop"
         android:id="@+id/ic_gps"
         android:src="@drawable/ic_gps_fixed_black_24dp"/>
 
-    <Button
-        android:id="@+id/btnGetDirection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/bottom_navigation"
-        android:text="Get direction">
-    </Button>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="#00FFFFFF"
+        android:background="#00949090"
         app:menu="@menu/bottom_navigation" />
+    <LinearLayout
+        android:layout_above="@id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/driving_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#dde5ad"
+            android:text="@string/driving" />
+
+        <Button
+            android:id="@+id/Walking_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#dde5ad"
+            android:layout_weight="1"
+            android:text="@string/walking" />
+
+        <Button
+            android:id="@+id/Bicycling_btn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#dde5ad"
+            android:layout_weight="1"
+            android:text="@string/bicycling" />
+
+    </LinearLayout>
 
 
 </RelativeLayout>

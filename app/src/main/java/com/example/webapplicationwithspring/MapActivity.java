@@ -41,6 +41,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -71,11 +74,6 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
                         case R.id.nav_profile:{
 
                             Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
-                            break;
-                        }
-                        case R.id.nav_suggestions:{
-                            startActivity(new Intent(getApplicationContext(), PlacesActivity.class));
-                            overridePendingTransition(0,0);
                             break;
                         }
                         case R.id.nav_map:{
@@ -142,7 +140,9 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private Button btnGetDirection;
+    private Button btnDriving;
+    private Button btnWalking;
+    private Button btnBicycling;
     Location currentLocation;
     MarkerOptions marker = new MarkerOptions();
     MarkerOptions current = new MarkerOptions();
@@ -155,15 +155,36 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
         setContentView(R.layout.activity_map);
         mSearchText = (EditText) findViewById(R.id.input_search);
         mGps = (ImageView) findViewById(R.id.ic_gps);
-        btnGetDirection = findViewById(R.id.btnGetDirection);
-        btnGetDirection.setOnClickListener(new View.OnClickListener() {
+        btnDriving = findViewById(R.id.driving_btn);
+        btnWalking = findViewById(R.id.Walking_btn);
+        btnBicycling = findViewById(R.id.Bicycling_btn);
+        btnDriving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String url = getUrl(marker.getPosition(),current.getPosition(),"driving");
-                new FetchURL(MapActivity.this).execute(url,"driving");
+                FetchURL d = new FetchURL(MapActivity.this);
+                d.execute(url,"driving");
+                Toast.makeText(MapActivity.this, "distance: " + d.distance + "   duration" + d.duration, Toast.LENGTH_SHORT).show();
             }
         });
-
+        btnWalking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = getUrl(marker.getPosition(),current.getPosition(),"walking");
+                FetchURL w = new FetchURL(MapActivity.this);
+                w.execute(url,"walking");
+                Toast.makeText(MapActivity.this, "distance: " + w.distance + "   duration" + w.duration, Toast.LENGTH_SHORT).show();
+            }
+        });
+        btnBicycling.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String url = getUrl(marker.getPosition(),current.getPosition(),"transit");
+                FetchURL t = new FetchURL(MapActivity.this);
+                t.execute(url,"transit");
+                Toast.makeText(MapActivity.this, "distance: " + t.distance + "   duration" + t.duration, Toast.LENGTH_SHORT).show();
+            }
+        });
 
         getLocationPermission();
 // set the bottom navigation bar to switch between activities
