@@ -14,7 +14,24 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+    </style>
 
+    <style name="AppTheme.SlidrActivityTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="WindowAnimations">
+        <item name="android:windowActivityTransitions">true</item>
+
+        <item name="android:activityOpenEnterAnimation">
+            @anim/enter_activity</item>
+        <item name="android:activityOpenExitAnimation">
+            @anim/exit_activity</item>
+        <item name="android:activityCloseEnterAnimation">
+            @anim/enter_activity</item>
+        <item name="android:activityCloseExitAnimation">
+            @anim/exit_activity</item>
     </style>
 
 </resources>

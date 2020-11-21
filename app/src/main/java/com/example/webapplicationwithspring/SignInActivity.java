@@ -17,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.r0adkll.slidr.Slidr;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +39,9 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        Slidr.attach(this);
+
         email = findViewById(R.id.sing_in_email);
         password = findViewById(R.id.sing_in_password);
         passwordR = findViewById(R.id.sing_in_passwordR);
@@ -77,50 +81,59 @@ public class SignInActivity extends AppCompatActivity {
                 boolean femaleB = female.isChecked();
                 RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
                 JSONObject request = new JSONObject();
-                try {
-                    request.put("email", email);
-                    request.put("password", password);
-                    request.put("firstName", firstNameS);
-                    request.put("lastName", lastNameS);
-                    request.put("role", "USER");
-                    request.put("status", "ACTIVE");
-                    if(male.isChecked()){
-                        request.put("gender", "male");
-                    } else{
-                        request.put("gender", "female");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                JsonObjectRequest objectRequest = new JsonObjectRequest(
-                        Request.Method.PUT,
-                        url,
-                        request,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    String status = response.getString("status");
-                                    if (status.equals("User was successfully created")) {
-                                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                                        startActivity(intent);
-                                    } else {
-                                        Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                if(emailS.equals("") || passwordS.equals("") || passwordRS.equals("") || firstNameS.equals("") || lastNameS.equals("")
+                || !(maleB || femaleB)){
+                    Toast.makeText(SignInActivity.this, " You should fill all fields", Toast.LENGTH_SHORT).show();
+                }else {
+                    if (!passwordS.equals(passwordRS)) {
+                        Toast.makeText(getApplicationContext(), "passwords does not match", Toast.LENGTH_SHORT).show();
+                    } else {
+                        try {
+                            request.put("email", emailS);
+                            request.put("password", passwordS);
+                            request.put("firstName", firstNameS);
+                            request.put("lastName", lastNameS);
+                            request.put("role", "USER");
+                            request.put("status", "ACTIVE");
+                            if (maleB) {
+                                request.put("gender", "male");
+                            } else {
+                                request.put("gender", "female");
                             }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(getApplicationContext(), "Server does not response", Toast.LENGTH_SHORT).show();
-                                Log.d("EventSSS", error.toString());
-                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                );
-                requestQueue.add(objectRequest);
+                        JsonObjectRequest objectRequest = new JsonObjectRequest(
+                                Request.Method.PUT,
+                                url,
+                                request,
+                                new Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+                                        try {
+                                            String status = response.getString("status");
+                                            if (status.equals("User was successfully created")) {
+                                                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                                startActivity(intent);
+                                            } else {
+                                                Toast.makeText(getApplicationContext(), status, Toast.LENGTH_SHORT).show();
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                },
+                                new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+                                        Toast.makeText(getApplicationContext(), "Server does not response", Toast.LENGTH_SHORT).show();
+                                        Log.d("EventSSS", error.toString());
+                                    }
+                                }
+                        );
+                        requestQueue.add(objectRequest);
+                    }
+                }
             }
         });
     }

@@ -1,6 +1,7 @@
 package com.example.webapplicationwithspring;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.example.webapplicationwithspring.Events.Place;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
@@ -18,11 +20,12 @@ public class Adapter extends PagerAdapter {
     private List<Place> places;
     private LayoutInflater layoutInflater;
     private Context context;
-
+    TextView seeOnMap;
 
     public Adapter(List<Place> places, Context context) {
         this.places = places;
         this.context = context;
+
     }
 //get amount of places in the list
     @Override
@@ -37,10 +40,9 @@ public class Adapter extends PagerAdapter {
 
     @NonNull
     @Override
-    public Object instantiateItem(@NonNull ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, final int position) {
         layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.place, container , false);
-
 // initialize each text view in the card with data from places list
         TextView title = view.findViewById(R.id.card_title);
         TextView address = view.findViewById(R.id.card_address);
@@ -59,7 +61,12 @@ public class Adapter extends PagerAdapter {
         text_click.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                String location = places.get(position).getLocation();
+                String[] coords = location.split(",");
+                Double latitude = Double.parseDouble(coords[0]);
+                Double longitude = Double.parseDouble(coords[1]);
+                LatLng latLng = new LatLng(latitude, longitude);
+                context.startActivity(new Intent(context, MapActivity.class));
             }
         });
         container.addView(view, 0);

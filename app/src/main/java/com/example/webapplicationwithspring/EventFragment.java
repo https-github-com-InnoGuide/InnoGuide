@@ -35,6 +35,13 @@ public class EventFragment extends Fragment {
         TextView description = event.findViewById(R.id.textView_description);
         TextView place = event.findViewById(R.id.textView_place);
 
+        place.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
         name.setText(EventsController.getEvent(getArguments().getInt("index",0)).getEventName());
         date.setText(EventsController.getEvent(getArguments().getInt("index",0)).getEventDate());
         description.setText(EventsController.getEvent(getArguments().getInt("index",0)).getEventDescription());

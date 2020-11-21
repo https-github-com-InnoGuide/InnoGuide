@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WebApplicationWithSpring</string>
+    <string name="app_name">InnoGuide</string>
     <string name="id_label">The ID is</string>
     <string name="id_value">[id]</string>
     <string name="content_label">The Content is</string>

@@ -4,6 +4,9 @@ package com.example.webapplicationwithspring.directionhelpers;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.example.webapplicationwithspring.MapActivity;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,13 +15,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-/**
- * Created by Vishal on 10/20/2018.
- */
 
 public class FetchURL extends AsyncTask<String, Void, String> {
     Context mContext;
     String directionMode = "driving";
+    public static String distance;
+    public static String duration ;
 
     public FetchURL(Context mContext) {
         this.mContext = mContext;
@@ -67,10 +69,40 @@ public class FetchURL extends AsyncTask<String, Void, String> {
             }
             data = sb.toString();
             Log.d("mylog", "Downloaded URL: " + data.toString());
+
+            for (int i=0;i<data.length();i++)
+                if(data.charAt(i)=='d' && data.charAt(i+1)=='i' && data.charAt(i+2)=='s' && data.charAt(i+3)=='t' && data.charAt(i+4)=='a')
+                    for(int j=i;j<data.length();j++)
+                        if (data.charAt(j)=='e' && data.charAt(j+1)=='x' && data.charAt(j+2)=='t')
+                            for (int k=j+5;k<data.length();k++)
+                                if (data.charAt(k)=='"')
+                                    for (int l=k+1;l<data.length();l++)
+                                        if ((data.charAt(l)=='"'))
+                                        {
+                                            distance = data.substring(k+1,l);
+                                            Log.d("mylog", "k l  " + k + l);
+                                            k = l = j = i = data.length();
+                                        }
+            for (int i=0;i<data.length();i++)
+                if(data.charAt(i)=='d' && data.charAt(i+1)=='u' && data.charAt(i+2)=='r' && data.charAt(i+3)=='a' && data.charAt(i+4)=='t')
+                    for(int j=i;j<data.length();j++)
+                        if (data.charAt(j)=='e' && data.charAt(j+1)=='x' && data.charAt(j+2)=='t')
+                            for (int k=j+5;k<data.length();k++)
+                                if (data.charAt(k)=='"')
+                                    for (int l=k+1;l<data.length();l++)
+                                        if ((data.charAt(l)=='"'))
+                                        {
+                                            duration = data.substring(k+1,l);
+                                            Log.d("mylog", "k l  " + k + l);
+                                            k = l = j = i = data.length();
+                                        }
+            Log.d("mylog", "distance " + distance);
+            Log.d("mylog", "duration " + duration);
             br.close();
         } catch (Exception e) {
             Log.d("mylog", "Exception downloading URL: " + e.toString());
         } finally {
+            assert iStream != null;
             iStream.close();
             urlConnection.disconnect();
         }

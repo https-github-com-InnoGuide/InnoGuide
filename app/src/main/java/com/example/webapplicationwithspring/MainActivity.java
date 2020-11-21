@@ -1,5 +1,6 @@
 package com.example.webapplicationwithspring;
 
+import android.app.ActivityOptions;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     // initialize the ArrayRequest and set value to the EventContoller Map
                     RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-                    JSONObject request = new JSONObject();
+                    final JSONObject request = new JSONObject();
                     try {
                         request.put("email", email);
                         request.put("password", password);
@@ -83,6 +84,11 @@ public class MainActivity extends AppCompatActivity {
                                 public void onResponse(JSONObject response) {
                                     try {
                                         Token.token = response.getString("token");
+                                        Person.setToken(Token.token);
+                                        Person.setFirstName(response.getString("firstName"));
+                                        Person.setLastName(response.getString("lastName"));
+                                        Person.setEmail(response.getString("email"));
+                                        Person.setGender(response.getString("gender"));
                                         Intent intent = new Intent(MainActivity.this, MapActivity.class);
                                         startActivity(intent);
                                     } catch (JSONException e) {

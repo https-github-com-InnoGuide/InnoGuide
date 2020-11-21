@@ -23,11 +23,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.NetworkResponse;
+import com.android.volley.ParseError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.webapplicationwithspring.Events.Event;
 import com.example.webapplicationwithspring.Events.EventsController;
@@ -37,8 +41,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventsActivity extends AppCompatActivity {
     private ListView listView;
@@ -64,7 +71,8 @@ public class EventsActivity extends AppCompatActivity {
                             break;
                         }
                         case R.id.nav_profile: {
-
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                            overridePendingTransition(0,0);
                             Toast.makeText(getApplicationContext(), "You are going to open profile fragment", Toast.LENGTH_SHORT).show();
                             break;
                         }
@@ -119,6 +127,55 @@ public class EventsActivity extends AppCompatActivity {
             // make a response to server to store the data
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             // initialize the ArrayRequest and set value to the EventContoller Map
+            CustomJsonArrayRequest customJsonArrayRequest = new CustomJsonArrayRequest(
+                    Request.Method.GET,
+                    url,
+                    null,
+                    new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            List<String> titles = new ArrayList<String>();
+                            List<String> descriptions = new ArrayList<String>();
+                            try {
+                                for (int i = 0; i < response.length(); i++) {
+                                    JSONObject jo = (JSONObject) response.get(i);
+                                    String eventName = jo.getString("eventName");
+                                    String eventDate = jo.getString("eventDate");
+                                    String eventDescription = jo.getString("eventDescription");
+                                    String eventPlace = jo.getString("eventPlace");
+                                    EventsController.addEvent(eventName, eventDate, eventDescription, eventPlace, Integer.parseInt(jo.getString("id")));
+                                    titles.add(eventName);
+                                    descriptions.add(eventDescription);
+                                }
+                                adapter = new MyAdapter(EventsActivity.this, titles.toArray(new String[titles.size()]), descriptions.toArray(new String[descriptions.size()]));
+                                listView.setAdapter(adapter);
+                            } catch (JSONException e) {
+                                //View errorView = getTextView(EventsActivity.this, "Server does not response");
+
+                                //listView.addHeaderView(errorView);
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            TextView tv = getTextView(EventsActivity.this, "Server does not response");
+                            FrameLayout frameLayout = findViewById(R.id.fragment_container);
+                            frameLayout.addView(tv);
+                            Log.d("EventSSS", error.toString());
+                        }
+                    }
+            ){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> params = new HashMap<String, String>();
+                    params.put("Authorization", Token.token);
+                    params.put("Content-Type", "application/json");
+                    return params;
+                }
+            };
+            /*
             JsonArrayRequest objectRequest = new JsonArrayRequest(
                     Request.Method.GET,
                     url,
@@ -159,7 +216,8 @@ public class EventsActivity extends AppCompatActivity {
                         }
                     }
             );
-            requestQueue.add(objectRequest);
+            */
+            requestQueue.add(customJsonArrayRequest);
         }
 
 
@@ -238,6 +296,26 @@ public class EventsActivity extends AppCompatActivity {
             titleView.setText(rTitle[position]);
             descriptionView.setText(rDescription[position]);
             return row;
+        }
+    }
+
+    private class CustomJsonArrayRequest extends JsonRequest<JSONArray> {
+        public CustomJsonArrayRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONArray> listener, Response.ErrorListener errorListener) {
+            super(method, url, (jsonRequest == null) ? null : jsonRequest.toString(), listener, errorListener);
+        }
+
+        @Override
+        protected Response<JSONArray> parseNetworkResponse(NetworkResponse response) {
+            try {
+                String jsonString = new String(response.data,
+                        HttpHeaderParser.parseCharset(response.headers, PROTOCOL_CHARSET));
+                return Response.success(new JSONArray(jsonString),
+                        HttpHeaderParser.parseCacheHeaders(response));
+            } catch (UnsupportedEncodingException e) {
+                return Response.error(new ParseError(e));
+            } catch (JSONException je) {
+                return Response.error(new ParseError(je));
+            }
         }
     }
 }
