@@ -143,8 +143,27 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+
+        extras = getIntent().getExtras();
+        if (extras!=null){
+            double latitude = extras.getDouble("latitude");
+            double longitude = extras.getDouble("longitude");
+
+            Log.d(TAG, "Here is extras  " + "latitude :" +latitude + "longitude :" + longitude);
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            marker.position(latLng);
+
+            mMap.clear();
+            //Zoom the marker
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            //Add marker on Map
+            mMap.addMarker(marker);
+        }
     }
 
+
+    private Bundle extras;
     private static final String TAG = "MapActivity";
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -159,9 +178,9 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
     //vars
     private Boolean mLocationPermissionsGranted = false;
     private GoogleMap mMap;
-    private Button btnDriving;
-    private Button btnWalking;
-    private Button btnBicycling;
+    private ImageView btnDriving;
+    private ImageView btnWalking;
+    private ImageView btnBicycling;
     Location currentLocation;
     MarkerOptions marker = new MarkerOptions();
     MarkerOptions current = new MarkerOptions();
@@ -288,9 +307,13 @@ public class MapActivity  extends AppCompatActivity implements OnMapReadyCallbac
                             Log.d(TAG, "onComplete: found location!");
                             currentLocation = (Location) task.getResult();
                             curLoc = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
-                            moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                                    DEFAULT_ZOOM,
-                                    "My Location");
+                            if (extras == null){
+                                Log.d(TAG, "onComplete: found location!");
+                                moveCamera(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                                        DEFAULT_ZOOM,
+                                        "My Location");
+                            }
+                            extras=null;
                             current.position(curLoc);
                             Toast.makeText(MapActivity.this, "your location is " + currentLocation.getLatitude() + " " +
                                     currentLocation.getLongitude() + " ", Toast.LENGTH_SHORT).show();

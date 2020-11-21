@@ -2,6 +2,7 @@ package com.example.webapplicationwithspring;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.webapplicationwithspring.Events.EventsController;
+import com.example.webapplicationwithspring.Events.PlacesList;
 
 // class for the event fragment click
 public class EventFragment extends Fragment {
@@ -38,7 +40,10 @@ public class EventFragment extends Fragment {
         place.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int id = PlacesList.getId(EventsController.getEvent(getArguments().getInt("index",0)).getEventPlace());
+                if(id != -1)
+                    PlacesActivity.position = id;
+                startActivity(new Intent(getActivity().getApplicationContext(), PlacesActivity.class));
             }
         });
 

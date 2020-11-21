@@ -8,6 +8,15 @@ public class Place {
     private String address;
     private String telegram;
     private String phoneNumber;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private int id;
 
     public Place(String name, String location, String description, String workHours,String address, String telegram, String phoneNumber, int id) {

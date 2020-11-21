@@ -65,8 +65,11 @@ public class Adapter extends PagerAdapter {
                 String[] coords = location.split(",");
                 Double latitude = Double.parseDouble(coords[0]);
                 Double longitude = Double.parseDouble(coords[1]);
-                LatLng latLng = new LatLng(latitude, longitude);
-                context.startActivity(new Intent(context, MapActivity.class));
+                // LatLng latLng = new LatLng(latitude, longitude);
+                Intent intent = new Intent(context, MapActivity.class);
+                intent.putExtra("latitude",latitude);
+                intent.putExtra("longitude",longitude);
+                context.startActivity(intent);
             }
         });
         container.addView(view, 0);

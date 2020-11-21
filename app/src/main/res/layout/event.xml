@@ -40,5 +40,6 @@
         android:text="Event Place"
         android:textSize="17sp"
         android:layout_marginTop="10dp"
+        android:textColor="#2975F4 "
         android:layout_marginLeft="16dp"/>
 </LinearLayout>

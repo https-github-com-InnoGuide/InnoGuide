@@ -133,31 +133,41 @@
         android:layout_above="@id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center_horizontal">
 
-        <Button
+
+        <ImageView
             android:id="@+id/driving_btn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#dde5ad"
-            android:text="driving" />
+            android:src="@drawable/ic_drive_eta_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            />
 
-        <Button
+
+        <ImageView
             android:id="@+id/Walking_btn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#dde5ad"
-            android:layout_weight="1"
-            android:text="walking" />
+            android:src="@drawable/ic_directions_walk_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
 
-        <Button
+        <ImageView
             android:id="@+id/Bicycling_btn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#dde5ad"
-            android:layout_weight="1"
-            android:text="bicycling" />
+            android:src="@drawable/ic_directions_bike_black_24dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"/>
+
+
+
 
     </LinearLayout>
 
