@@ -6,4 +6,4 @@ InnoGuide
 Clone this repository to your android studio
 
 # Demo of application 
-open files FinalDemo1 and FinalDemo2
+https://drive.google.com/drive/folders/13w2pXLzh7Zvh1lnsX526RlM3GOb4THGJ?usp=sharing
